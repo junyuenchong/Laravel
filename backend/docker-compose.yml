@@ -3,9 +3,12 @@ services:
     build:
       context: .
       dockerfile: docker/backend/Dockerfile
+      args:
+        PHP_VERSION: "8.4"
     ports:
       - "${APP_PORT:-8080}:80"
     environment:
+      PHP_VERSION: "8.4"
       APP_ENV: "${APP_ENV:-local}"
       APP_DEBUG: "${APP_DEBUG:-true}"
       APP_URL: "${APP_URL:-http://localhost:8080}"
