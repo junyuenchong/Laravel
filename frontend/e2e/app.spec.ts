@@ -15,7 +15,7 @@ test('login and view items list', async ({ page }) => {
     expect(res.status(), 'login status').toBe(200)
 
     await expect(page).toHaveURL(/\/items/)
-    await expect(page.getByText('Items')).toBeVisible()
+    await expect(page.getByText('Items', { exact: true })).toBeVisible()
 
     // Load items (seeded on backend)
     await expect(page.getByRole('button', { name: /Load more|No more/ })).toBeVisible()
