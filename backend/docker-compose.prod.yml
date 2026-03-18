@@ -1,0 +1,7 @@
+services:
+  backend:
+    ports:
+      - "${APP_TLS_PORT:-8443}:443"
+    environment:
+      ENABLE_TLS: "1"
+

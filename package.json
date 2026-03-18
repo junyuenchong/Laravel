@@ -1,0 +1,38 @@
+{
+  "name": "interview-project-root",
+  "private": true,
+  "scripts": {
+    "prepare": "husky install",
+
+    "check:frontend": "npm --prefix frontend run lint && npm --prefix frontend run format && npm --prefix frontend run typecheck && npm --prefix frontend run test",
+    "check:backend": "cd backend && composer lint && composer analyse && php artisan test",
+    "check": "npm run check:frontend && npm run check:backend",
+
+    "frontend:lint": "npm --prefix frontend run lint",
+    "frontend:format": "npm --prefix frontend run format",
+    "frontend:format:fix": "npm --prefix frontend run format:fix",
+    "frontend:typecheck": "npm --prefix frontend run typecheck",
+    "frontend:test": "npm --prefix frontend run test",
+
+    "backend:lint": "cd backend && composer lint",
+    "backend:analyse": "cd backend && composer analyse",
+    "backend:test": "cd backend && php artisan test"
+  },
+  "devDependencies": {
+    "husky": "^9.1.7",
+    "lint-staged": "^16.1.6"
+  },
+  "lint-staged": {
+    "frontend/src/**/*.{ts,tsx,js,jsx,vue}": [
+      "npm --prefix frontend run lint -- --fix",
+      "npm --prefix frontend run format:fix"
+    ],
+    "frontend/**/*.{json,css,md}": [
+      "npm --prefix frontend run format:fix"
+    ],
+    "backend/**/*.{php}": [
+      "cd backend && composer lint"
+    ]
+  }
+}
+

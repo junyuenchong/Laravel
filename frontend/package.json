@@ -1,0 +1,47 @@
+{
+  "name": "frontend",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vue-tsc -b && vite build",
+    "typecheck": "vue-tsc --noEmit",
+    "preview": "vite preview",
+    "test": "vitest run",
+    "test:ui": "vitest --ui",
+    "e2e": "playwright test",
+    "lint": "eslint src --ext .ts,.vue",
+    "format": "prettier --check \"src/**/*.{ts,vue,js,json,css}\"",
+    "format:fix": "prettier --write \"src/**/*.{ts,vue,js,json,css}\""
+  },
+  "dependencies": {
+    "axios": "^1.13.6",
+    "pinia": "^3.0.4",
+    "vue": "^3.5.30",
+    "vue-router": "^5.0.3"
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.58.2",
+    "@testing-library/jest-dom": "^6.9.1",
+    "@testing-library/vue": "^8.1.0",
+    "@types/node": "^24.12.0",
+    "@vitejs/plugin-basic-ssl": "^2.2.0",
+    "@vitejs/plugin-vue": "^6.0.5",
+    "@vitest/ui": "^4.1.0",
+    "@vue/eslint-config-typescript": "^13.0.0",
+    "@vue/test-utils": "^2.4.6",
+    "@vue/tsconfig": "^0.9.0",
+    "autoprefixer": "^10.4.27",
+    "eslint": "^8.57.0",
+    "eslint-config-prettier": "^10.1.8",
+    "jsdom": "^29.0.0",
+    "postcss": "^8.5.8",
+    "prettier": "^3.2.0",
+    "tailwindcss": "^3.4.0",
+    "typescript": "~5.9.3",
+    "vite": "^8.0.0",
+    "vitest": "^4.1.0",
+    "vue-tsc": "^3.2.5"
+  }
+}

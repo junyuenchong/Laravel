@@ -1,0 +1,8 @@
+#!/usr/bin/env sh
+. "$(dirname -- "$0")/_/husky.sh"
+
+# Keep push-time checks a bit stronger than pre-commit.
+cd frontend && npm run lint && npm run format && npm run typecheck && npm test
+
+cd ../backend && composer lint && composer analyse && php artisan test
+

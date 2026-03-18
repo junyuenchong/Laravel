@@ -1,0 +1,14 @@
+import { defineConfig } from 'vitest/config'
+import vue from '@vitejs/plugin-vue'
+
+export default defineConfig({
+  plugins: [vue()],
+  test: {
+    environment: 'jsdom',
+    setupFiles: ['./vitest.setup.ts'],
+    globals: true,
+    include: ['src/**/*.{test,spec}.{ts,tsx,js,jsx}'],
+    exclude: ['e2e/**', '**/node_modules/**', '**/dist/**'],
+  },
+})
+
