@@ -11,7 +11,7 @@ export default defineConfig({
         },
     ],
     use: {
-        baseURL: process.env.E2E_BASE_URL ?? 'https://localhost:5173',
+        baseURL: process.env.E2E_BASE_URL ?? 'http://localhost:5173',
         ignoreHTTPSErrors: true,
         trace: 'retain-on-failure',
         screenshot: 'only-on-failure',
