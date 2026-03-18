@@ -96,7 +96,7 @@ jobs:
       - name: Prepare backend database
         working-directory: backend
         run: |
-          docker compose exec -T php php artisan migrate --seed
+          docker compose exec -T backend php artisan migrate --seed
 
       - name: Start frontend (HTTPS dev server)
         working-directory: frontend
