@@ -83,12 +83,6 @@ jobs:
       - name: Install backend dependencies (for Docker bind mount)
         working-directory: backend
         run: composer install --no-interaction --no-progress --prefer-dist
-      
-      - name: Prepare backend .env (APP_KEY)
-        working-directory: backend
-        run: |
-          cp .env.example .env
-          php artisan key:generate --force
 
       - name: Setup Node
         uses: actions/setup-node@v4
@@ -114,6 +108,8 @@ jobs:
         run: |
           # Wait for MySQL to accept connections (Compose depends_on doesn't guarantee readiness)
           docker compose exec -T mysql sh -lc 'for i in $(seq 1 60); do mysqladmin ping -h 127.0.0.1 -uroot -p"$MYSQL_ROOT_PASSWORD" --silent && exit 0; sleep 2; done; exit 1'
+          # Ensure backend has .env and APP_KEY inside the container (required for CSRF cookie encryption)
+          docker compose exec -T backend sh -lc 'test -f .env || cp .env.example .env; php artisan key:generate --force'
           docker compose exec -T backend php artisan migrate --seed
 
       - name: Start frontend (dev server)
