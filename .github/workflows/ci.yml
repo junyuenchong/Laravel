@@ -83,6 +83,12 @@ jobs:
       - name: Install backend dependencies (for Docker bind mount)
         working-directory: backend
         run: composer install --no-interaction --no-progress --prefer-dist
+      
+      - name: Prepare backend .env (APP_KEY)
+        working-directory: backend
+        run: |
+          cp .env.example .env
+          php artisan key:generate --force
 
       - name: Setup Node
         uses: actions/setup-node@v4
