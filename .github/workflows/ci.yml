@@ -106,6 +106,8 @@ jobs:
       - name: Prepare backend database
         working-directory: backend
         run: |
+          # Wait for MySQL to accept connections (Compose depends_on doesn't guarantee readiness)
+          docker compose exec -T mysql sh -lc 'for i in $(seq 1 60); do mysqladmin ping -h 127.0.0.1 -uroot -p"$MYSQL_ROOT_PASSWORD" --silent && exit 0; sleep 2; done; exit 1'
           docker compose exec -T backend php artisan migrate --seed
 
       - name: Start frontend (HTTPS dev server)
