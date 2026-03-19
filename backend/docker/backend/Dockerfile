@@ -34,10 +34,14 @@ RUN sed -i 's/\r$//' /entrypoint.sh && chmod +x /entrypoint.sh
 
 # Install PHP dependencies for production image
 COPY composer.json composer.lock /var/www/html/
-RUN composer install --no-interaction --no-ansi --no-progress --prefer-dist --no-dev --optimize-autoloader
+RUN composer install --no-interaction --no-ansi --no-progress --prefer-dist --no-dev --no-scripts
 
 # App source (for production image).
 COPY . /var/www/html
+
+# Now that artisan exists, run composer scripts and optimize autoload.
+RUN composer dump-autoload --no-interaction --no-ansi --no-progress --optimize \
+    && php artisan package:discover --ansi
 
 EXPOSE 80
 
