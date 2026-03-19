@@ -60,7 +60,7 @@ services:
     volumes:
       - redis_data:/data
     command: >
-      sh -c 'exec redis-server --appendonly yes ${REDIS_PASSWORD:+--requirepass "$REDIS_PASSWORD"}'
+      sh -c 'if [ -n "$$REDIS_PASSWORD" ]; then exec redis-server --appendonly yes --requirepass "$$REDIS_PASSWORD"; else exec redis-server --appendonly yes; fi'
     networks:
       - appnet
 
