@@ -1,0 +1,87 @@
+services:
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    ports:
+      - "80:80"
+    depends_on:
+      - backend
+    networks:
+      - appnet
+
+  backend:
+    build:
+      context: ./backend
+      dockerfile: docker/backend/Dockerfile
+      args:
+        PHP_VERSION: "8.4"
+    environment:
+      APP_ENV: production
+      APP_DEBUG: "false"
+      APP_URL: http://localhost
+
+      DB_CONNECTION: mysql
+      DB_HOST: mysql
+      DB_PORT: 3306
+      DB_DATABASE: "${DB_DATABASE:-app}"
+      DB_USERNAME: "${DB_USERNAME:-app}"
+      DB_PASSWORD: "${DB_PASSWORD:-secret}"
+
+      CACHE_STORE: redis
+      QUEUE_CONNECTION: sync
+
+      REDIS_CLIENT: phpredis
+      REDIS_HOST: redis
+      REDIS_PORT: 6379
+      REDIS_PASSWORD: "${REDIS_PASSWORD:-}"
+      REDIS_DB: "${REDIS_DB:-0}"
+      REDIS_CACHE_DB: "${REDIS_CACHE_DB:-1}"
+
+      FRONTEND_URL: "${FRONTEND_URL:-http://localhost}"
+      COOKIE_SECURE: "${COOKIE_SECURE:-false}"
+      COOKIE_SAMESITE: "${COOKIE_SAMESITE:-lax}"
+      SESSION_SECURE_COOKIE: "${SESSION_SECURE_COOKIE:-false}"
+      SESSION_SAME_SITE: "${SESSION_SAME_SITE:-lax}"
+    volumes:
+      # You must provide backend/.env on the host (with APP_KEY, JWT_SECRET, etc.)
+      - ./backend/.env:/var/www/html/.env:ro
+    depends_on:
+      - mysql
+      - redis
+    networks:
+      - appnet
+
+  redis:
+    image: redis:7.4-alpine
+    restart: unless-stopped
+    environment:
+      REDIS_PASSWORD: "${REDIS_PASSWORD:-}"
+    volumes:
+      - redis_data:/data
+    command: >
+      sh -c 'exec redis-server --appendonly yes ${REDIS_PASSWORD:+--requirepass "$REDIS_PASSWORD"}'
+    networks:
+      - appnet
+
+  mysql:
+    image: mysql:8.0
+    command: --default-authentication-plugin=mysql_native_password
+    restart: unless-stopped
+    environment:
+      MYSQL_DATABASE: "${DB_DATABASE:-app}"
+      MYSQL_USER: "${DB_USERNAME:-app}"
+      MYSQL_PASSWORD: "${DB_PASSWORD:-secret}"
+      MYSQL_ROOT_PASSWORD: "${DB_ROOT_PASSWORD:-root}"
+    volumes:
+      - mysql_data:/var/lib/mysql
+    networks:
+      - appnet
+
+volumes:
+  mysql_data:
+  redis_data:
+
+networks:
+  appnet:
+
