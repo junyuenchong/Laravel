@@ -32,7 +32,11 @@ COPY docker/backend/php.ini /usr/local/etc/php/conf.d/99-app.ini
 COPY docker/backend/entrypoint.sh /entrypoint.sh
 RUN sed -i 's/\r$//' /entrypoint.sh && chmod +x /entrypoint.sh
 
-# App source (for production image). In dev you'll typically bind-mount.
+# Install PHP dependencies for production image
+COPY composer.json composer.lock /var/www/html/
+RUN composer install --no-interaction --no-ansi --no-progress --prefer-dist --no-dev --optimize-autoloader
+
+# App source (for production image).
 COPY . /var/www/html
 
 EXPOSE 80
