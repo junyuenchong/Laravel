@@ -40,7 +40,7 @@ RUN composer install --no-interaction --no-ansi --no-progress --prefer-dist --no
 COPY . /var/www/html
 
 # Now that artisan exists, run composer scripts and optimize autoload.
-RUN composer dump-autoload --no-interaction --no-ansi --no-progress --optimize \
+RUN composer dump-autoload --no-interaction --no-ansi --optimize \
     && php artisan package:discover --ansi
 
 EXPOSE 80
